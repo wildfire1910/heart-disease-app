@@ -78,7 +78,7 @@ predefined_sets = {
         "slope": 2,
         "ca": 1,
         "thal": 3
-    }
+    },
     "Set 4": {
         "age": 59,
         "sex": 1,
@@ -93,7 +93,7 @@ predefined_sets = {
         "slope": 3,
         "ca": 0,
         "thal": 7
-    }
+    },
     "Set 5": {
         "age": 58,
         "sex": 1,
@@ -108,7 +108,7 @@ predefined_sets = {
         "slope": 2,
         "ca": 0,
         "thal": 3
-    }
+    },
     "Set 6": {
         "age": 61,
         "sex": 1,
