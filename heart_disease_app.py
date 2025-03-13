@@ -46,6 +46,36 @@ def get_risk_level(prediction):
     else:
         return "Unknown Risk"
 
+def get_medication_recommendations(risk_level):
+    recommendations = {
+        "No Risk": [
+            "Maintain a healthy lifestyle.",
+            "Regular exercise and a balanced diet.",
+            "No specific medication required."
+        ],
+        "Low Risk": [
+            "Lifestyle changes: Exercise, healthy diet, and stress management.",
+            "Consider low-dose aspirin if recommended by a doctor.",
+            "Monitor blood pressure and cholesterol regularly."
+        ],
+        "Medium Risk": [
+            "Medications: Statins to control cholesterol.",
+            "Beta-blockers or ACE inhibitors for blood pressure management.",
+            "Lifestyle changes: Quit smoking, reduce alcohol intake, and exercise regularly."
+        ],
+        "High Risk": [
+            "Medications: Statins, beta-blockers, ACE inhibitors, and antiplatelet drugs.",
+            "Regular monitoring of heart health.",
+            "Consider consulting a cardiologist for advanced treatment options."
+        ],
+        "Highest Risk": [
+            "Immediate medical attention required.",
+            "Medications: High-dose statins, beta-blockers, ACE inhibitors, and antiplatelet drugs.",
+            "Possible surgical interventions: Angioplasty or bypass surgery."
+        ]
+    }
+    return recommendations.get(risk_level, ["No recommendations available."])
+    
 # Predefined sets of inputs
 predefined_sets = {
     "Set 1": {
@@ -190,6 +220,12 @@ def main():
         risk_level = get_risk_level(prediction)
         st.write(f"Predicted Target: {prediction}")
         st.write(f"Risk Level: {risk_level}")
+
+        # Display medication recommendations
+        st.subheader("Medication Recommendations:")
+        recommendations = get_medication_recommendations(risk_level)
+        for recommendation in recommendations:
+            st.write(f"- {recommendation}")
 
 # Run the app
 if __name__ == "__main__":
