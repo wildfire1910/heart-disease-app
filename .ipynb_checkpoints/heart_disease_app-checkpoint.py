@@ -1,0 +1,135 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "1b7e932f-c6a8-49c8-96ef-766e795edd27",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "2025-03-13 13:02:26.795 \n",
+      "  \u001b[33m\u001b[1mWarning:\u001b[0m to view this Streamlit app on a browser, run it with the following\n",
+      "  command:\n",
+      "\n",
+      "    streamlit run C:\\Users\\abhir\\anaconda3\\Lib\\site-packages\\ipykernel_launcher.py [ARGUMENTS]\n",
+      "2025-03-13 13:02:26.798 Session state does not function when running a script without `streamlit run`\n"
+     ]
+    }
+   ],
+   "source": [
+    "import streamlit as st\n",
+    "import numpy as np\n",
+    "import joblib\n",
+    "\n",
+    "# Load the trained model and scaler\n",
+    "rf_model = joblib.load(\"random_forest_model.pkl\")\n",
+    "sc = joblib.load(\"standard_scaler.pkl\")\n",
+    "\n",
+    "# Function to preprocess input data and make predictions\n",
+    "def predict(input_data):\n",
+    "    # Convert input data to numpy array\n",
+    "    input_array = np.array([[\n",
+    "        input_data[\"age\"],\n",
+    "        input_data[\"sex\"],\n",
+    "        input_data[\"cp\"],\n",
+    "        input_data[\"trestbps\"],\n",
+    "        input_data[\"chol\"],\n",
+    "        input_data[\"fbs\"],\n",
+    "        input_data[\"restecg\"],\n",
+    "        input_data[\"thalach\"],\n",
+    "        input_data[\"exang\"],\n",
+    "        input_data[\"oldpeak\"],\n",
+    "        input_data[\"slope\"],\n",
+    "        input_data[\"ca\"],\n",
+    "        input_data[\"thal\"]\n",
+    "    ]])\n",
+    "\n",
+    "    # Scale the input data\n",
+    "    input_array_scaled = sc.transform(input_array)\n",
+    "\n",
+    "    # Make a prediction\n",
+    "    prediction = rf_model.predict(input_array_scaled)\n",
+    "    return prediction[0]\n",
+    "\n",
+    "# Streamlit app\n",
+    "def main():\n",
+    "    st.title(\"Heart Disease Prediction App\")\n",
+    "    st.write(\"Enter the patient's details to predict the risk of heart disease.\")\n",
+    "\n",
+    "    # Input fields for user data\n",
+    "    age = st.number_input(\"Age\", min_value=0, max_value=120, value=58)\n",
+    "    sex = st.selectbox(\"Sex\", options=[0, 1], format_func=lambda x: \"Female\" if x == 0 else \"Male\")\n",
+    "    cp = st.selectbox(\"Chest Pain Type (cp)\", options=[0, 1, 2, 3])\n",
+    "    trestbps = st.number_input(\"Resting Blood Pressure (trestbps)\", min_value=0, max_value=200, value=132)\n",
+    "    chol = st.number_input(\"Serum Cholesterol (chol)\", min_value=0, max_value=600, value=224)\n",
+    "    fbs = st.selectbox(\"Fasting Blood Sugar > 120 mg/dl (fbs)\", options=[0, 1])\n",
+    "    restecg = st.selectbox(\"Resting Electrocardiographic Results (restecg)\", options=[0, 1, 2])\n",
+    "    thalach = st.number_input(\"Maximum Heart Rate Achieved (thalach)\", min_value=0, max_value=220, value=173)\n",
+    "    exang = st.selectbox(\"Exercise Induced Angina (exang)\", options=[0, 1])\n",
+    "    oldpeak = st.number_input(\"ST Depression Induced by Exercise (oldpeak)\", min_value=0.0, max_value=10.0, value=3.2)\n",
+    "    slope = st.selectbox(\"Slope of the Peak Exercise ST Segment (slope)\", options=[0, 1, 2])\n",
+    "    ca = st.number_input(\"Number of Major Vessels Colored by Fluoroscopy (ca)\", min_value=0, max_value=4, value=2)\n",
+    "    thal = st.selectbox(\"Thalassemia (thal)\", options=[1, 2, 3, 4, 5, 6, 7])\n",
+    "\n",
+    "    # Create a dictionary of input data\n",
+    "    input_data = {\n",
+    "        \"age\": age,\n",
+    "        \"sex\": sex,\n",
+    "        \"cp\": cp,\n",
+    "        \"trestbps\": trestbps,\n",
+    "        \"chol\": chol,\n",
+    "        \"fbs\": fbs,\n",
+    "        \"restecg\": restecg,\n",
+    "        \"thalach\": thalach,\n",
+    "        \"exang\": exang,\n",
+    "        \"oldpeak\": oldpeak,\n",
+    "        \"slope\": slope,\n",
+    "        \"ca\": ca,\n",
+    "        \"thal\": thal\n",
+    "    }\n",
+    "\n",
+    "    # Predict button\n",
+    "    if st.button(\"Predict\"):\n",
+    "        # Make prediction\n",
+    "        prediction = predict(input_data)\n",
+    "        st.write(f\"Predicted Target: {prediction}\")\n",
+    "\n",
+    "# Run the app\n",
+    "if __name__ == \"__main__\":\n",
+    "    main()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   
+   "id": "5c294884-adfc-4434-b984-0b761cac85b8",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python [conda env:base] *",
+   "language": "python",
+   "name": "conda-base-py"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
