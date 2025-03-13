@@ -32,6 +32,20 @@ def predict(input_data):
     prediction = rf_model.predict(input_array_scaled)
     return prediction[0]
 
+def get_risk_level(prediction):
+    if prediction == 0:
+        return "No Risk"
+    elif prediction == 1:
+        return "Low Risk"
+    elif prediction == 2:
+        return "Medium Risk"
+    elif prediction == 3:
+        return "High Risk"
+    elif prediction == 4:
+        return "Highest Risk"
+    else:
+        return "Unknown Risk"
+
 # Predefined sets of inputs
 predefined_sets = {
     "Set 1": {
@@ -173,7 +187,9 @@ def main():
     if st.button("Predict"):
         # Make prediction
         prediction = predict(input_data)
+        risk_level = get_risk_level(prediction)
         st.write(f"Predicted Target: {prediction}")
+        st.write(f"Risk Level: {risk_level}")
 
 # Run the app
 if __name__ == "__main__":
