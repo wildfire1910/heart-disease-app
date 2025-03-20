@@ -2,9 +2,9 @@ import streamlit as st
 import numpy as np
 import joblib
 
-# Load the trained model and scaler
-rf_model = joblib.load("random_forest_model.pkl")
-sc = joblib.load("standard_scaler.pkl")
+# Load the trained KNN model and scaler
+knn_model = joblib.load("best_knn_model.joblib")  # Load the KNN model
+sc = joblib.load("standard_scaler.joblib")  # Load the scaler
 
 # Function to preprocess input data and make predictions
 def predict(input_data):
@@ -29,20 +29,14 @@ def predict(input_data):
     input_array_scaled = sc.transform(input_array)
 
     # Make a prediction
-    prediction = rf_model.predict(input_array_scaled)
+    prediction = knn_model.predict(input_array_scaled)
     return prediction[0]
 
 def get_risk_level(prediction):
     if prediction == 0:
         return "No Risk"
     elif prediction == 1:
-        return "Low Risk"
-    elif prediction == 2:
-        return "Medium Risk"
-    elif prediction == 3:
-        return "High Risk"
-    elif prediction == 4:
-        return "Highest Risk"
+        return "Risk"
     else:
         return "Unknown Risk"
 
@@ -53,25 +47,12 @@ def get_medication_recommendations(risk_level):
             "Regular exercise and a balanced diet.",
             "No specific medication required."
         ],
-        "Low Risk": [
+        "Risk": [
             "Lifestyle changes: Exercise, healthy diet, and stress management.",
             "Consider low-dose aspirin if recommended by a doctor.",
-            "Monitor blood pressure and cholesterol regularly."
-        ],
-        "Medium Risk": [
-            "Medications: Statins to control cholesterol.",
-            "Beta-blockers or ACE inhibitors for blood pressure management.",
-            "Lifestyle changes: Quit smoking, reduce alcohol intake, and exercise regularly."
-        ],
-        "High Risk": [
-            "Medications: Statins, beta-blockers, ACE inhibitors, and antiplatelet drugs.",
-            "Regular monitoring of heart health.",
-            "Consider consulting a cardiologist for advanced treatment options."
-        ],
-        "Highest Risk": [
-            "Immediate medical attention required.",
-            "Medications: High-dose statins, beta-blockers, ACE inhibitors, and antiplatelet drugs.",
-            "Possible surgical interventions: Angioplasty or bypass surgery."
+            "Monitor blood pressure and cholesterol regularly.",
+            "Medications: Statins, beta-blockers, or ACE inhibitors if prescribed by a doctor.",
+            "Consult a cardiologist for advanced treatment options."
         ]
     }
     return recommendations.get(risk_level, ["No recommendations available."])
@@ -172,7 +153,7 @@ predefined_sets = {
 
 # Streamlit app
 def main():
-    st.title("Heart Disease Prediction App")
+    st.title("Heart Disease Prediction App (KNN Model)")
     st.write("Enter the patient's details to predict the risk of heart disease.")
 
     # Dropdown menu for predefined sets
@@ -184,7 +165,7 @@ def main():
     # Input fields for user data
     age = st.number_input("Age", min_value=0, max_value=120, value=predefined_data["age"])
     sex = st.selectbox("Sex", options=[0, 1], format_func=lambda x: "Female" if x == 0 else "Male", index=predefined_data["sex"])
-    cp = st.selectbox("Chest Pain Type (cp)", options=[0,1, 2, 3], index=predefined_data["cp"]-1)
+    cp = st.selectbox("Chest Pain Type (cp)", options=[0, 1, 2, 3], index=predefined_data["cp"])
     trestbps = st.number_input("Resting Blood Pressure (trestbps)", min_value=0, max_value=200, value=predefined_data["trestbps"])
     chol = st.number_input("Serum Cholesterol (chol)", min_value=0, max_value=600, value=predefined_data["chol"])
     fbs = st.selectbox("Fasting Blood Sugar > 120 mg/dl (fbs)", options=[0, 1], index=predefined_data["fbs"])
@@ -192,7 +173,7 @@ def main():
     thalach = st.number_input("Maximum Heart Rate Achieved (thalach)", min_value=0, max_value=220, value=predefined_data["thalach"])
     exang = st.selectbox("Exercise Induced Angina (exang)", options=[0, 1], index=predefined_data["exang"])
     oldpeak = st.number_input("ST Depression Induced by Exercise (oldpeak)", min_value=0.0, max_value=10.0, value=predefined_data["oldpeak"])
-    slope = st.selectbox("Slope of the Peak Exercise ST Segment (slope)", options=[0, 1, 2], index=predefined_data["slope"]-1)
+    slope = st.selectbox("Slope of the Peak Exercise ST Segment (slope)", options=[0, 1, 2], index=predefined_data["slope"])
     ca = st.number_input("Number of Major Vessels Colored by Fluoroscopy (ca)", min_value=0, max_value=4, value=predefined_data["ca"])
     thal = st.selectbox("Thalassemia (thal)", options=[1, 2, 3, 4, 5, 6, 7], index=predefined_data["thal"] - 1)
 
