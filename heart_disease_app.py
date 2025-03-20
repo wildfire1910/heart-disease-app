@@ -174,7 +174,8 @@ def main():
     thalach = st.number_input("Maximum Heart Rate Achieved (thalach)", min_value=0, max_value=220, value=predefined_data["thalach"])
     exang = st.selectbox("Exercise Induced Angina (exang)", options=[0, 1], index=predefined_data["exang"])
     oldpeak = st.number_input("ST Depression Induced by Exercise (oldpeak)", min_value=0.0, max_value=10.0, value=predefined_data["oldpeak"])
-    slope = st.selectbox("Slope of the Peak Exercise ST Segment (slope)", options=[0, 1, 2], index=predefined_data["slope"]-1)
+    slope_input = st.selectbox("Slope of the Peak Exercise ST Segment (slope)", options=[1, 2, 3], index=predefined_data["slope"] - 1)  # Map to 0, 1, 2
+    slope = slope_input
     ca = st.number_input("Number of Major Vessels Colored by Fluoroscopy (ca)", min_value=0, max_value=4, value=predefined_data["ca"])
     thal = st.selectbox("Thalassemia (thal)", options=[1, 2, 3, 4, 5, 6, 7], index=predefined_data["thal"] - 1)
 
