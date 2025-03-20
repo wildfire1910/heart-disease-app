@@ -165,8 +165,8 @@ def main():
     # Input fields for user data
     age = st.number_input("Age", min_value=0, max_value=120, value=predefined_data["age"])
     sex = st.selectbox("Sex", options=[0, 1], format_func=lambda x: "Female" if x == 0 else "Male", index=predefined_data["sex"])
-    cp_input = st.selectbox("Chest Pain Type (cp)", options=[0, 1, 2, 3], index=predefined_data["cp"])
-    cp = cp_input if cp_input in [1, 2, 3] else 0
+    cp_input = st.selectbox("Chest Pain Type (cp)", options=[1, 2, 3, 4], index=predefined_data["cp"] - 1)  # Map to 0, 1, 2, 3
+    cp = cp_input
     trestbps = st.number_input("Resting Blood Pressure (trestbps)", min_value=0, max_value=200, value=predefined_data["trestbps"])
     chol = st.number_input("Serum Cholesterol (chol)", min_value=0, max_value=600, value=predefined_data["chol"])
     fbs = st.selectbox("Fasting Blood Sugar > 120 mg/dl (fbs)", options=[0, 1], index=predefined_data["fbs"])
